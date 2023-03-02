@@ -1,8 +1,9 @@
 package ru.javaops.masterjava.matrix;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.*;
 
 /**
  * gkislin
@@ -12,9 +13,26 @@ public class MatrixUtil {
 
     // TODO implement parallel multiplication matrixA*matrixB
     public static int[][] concurrentMultiply(int[][] matrixA, int[][] matrixB, ExecutorService executor) throws InterruptedException, ExecutionException {
+        executor = Executors.newFixedThreadPool(10);
+        ArrayList<Future> futures = new ArrayList<>();
         final int matrixSize = matrixA.length;
         final int[][] matrixC = new int[matrixSize][matrixSize];
-
+        for (int i = 0; i < matrixSize; i++) {
+            for (int j = 0; j < matrixSize; j++) {
+                int n = i;
+                int m = j;
+                futures.add(executor.submit(() -> {
+                    int sum = 0;
+                    for (int k = 0; k < matrixSize; k++) {
+                        sum += matrixA[n][k] * matrixB[k][m];
+                    }
+                    matrixC[n][m] = sum;
+                }));
+            }
+        }
+        for (Future future : futures) {
+            future.get();
+        }
         return matrixC;
     }
 

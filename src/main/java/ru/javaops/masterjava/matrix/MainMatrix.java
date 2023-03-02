@@ -1,5 +1,6 @@
 package ru.javaops.masterjava.matrix;
 
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,11 +35,13 @@ public class MainMatrix {
             duration = (System.currentTimeMillis() - start) / 1000.;
             out("Concurrent thread time, sec: %.3f", duration);
             concurrentThreadSum += duration;
-
+//            System.out.println(Arrays.deepToString(matrixC));
+//            System.out.println(Arrays.deepToString(concurrentMatrixC));
             if (!MatrixUtil.compare(matrixC, concurrentMatrixC)) {
                 System.err.println("Comparison failed");
                 break;
             }
+
             count++;
         }
         executor.shutdown();
