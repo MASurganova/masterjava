@@ -18,18 +18,18 @@ public class MatrixUtil {
         final int matrixSize = matrixA.length;
         final int[][] matrixC = new int[matrixSize][matrixSize];
         for (int i = 0; i < matrixSize; i++) {
-            for (int j = 0; j < matrixSize; j++) {
-                int n = i;
-                int m = j;
-                futures.add(executor.submit(() -> {
+            int n = i;
+            futures.add(executor.submit(() -> {
+                for (int j = 0; j < matrixSize; j++) {
                     int sum = 0;
                     for (int k = 0; k < matrixSize; k++) {
-                        sum += matrixA[n][k] * matrixB[k][m];
+                        sum += matrixA[n][k] * matrixB[k][j];
                     }
-                    matrixC[n][m] = sum;
-                }));
-            }
+                    matrixC[n][j] = sum;
+                }
+            }));
         }
+        System.out.println(futures.size());
         for (Future future : futures) {
             future.get();
         }
