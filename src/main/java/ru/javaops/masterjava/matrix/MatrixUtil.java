@@ -4,6 +4,8 @@ import ru.javaops.masterjava.service.MailService;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * gkislin
@@ -14,28 +16,22 @@ public class MatrixUtil {
     public static int[][] concurrentMultiply(int[][] matrixA, int[][] matrixB, ExecutorService executor) throws InterruptedException, ExecutionException {
         final int matrixSize = matrixA.length;
         final int[][] matrixC = new int[matrixSize][matrixSize];
-        Set<Callable<Void>> tasks = new HashSet<>();
-        for (int i = 0; i < matrixSize; i++) {
-            int[] columnB = new int[matrixSize];
-            for (int j = 0; j < matrixSize; j++) {
-                columnB[j]= matrixB[j][i];
-            }
-            int col = i;
-            tasks.add(new Callable<Void>() {
-                @Override
-                public Void call() {
-                    for (int row = 0; row < matrixSize; row++) {
-                        int sum = 0;
-                        int[] rowA = matrixA[row];
-                        for (int k = 0; k < matrixSize; k++) {
-                            sum += rowA[k] * columnB[k];
-                        }
-                        matrixC[row][col] = sum;
-                    }
-                    return null;
+        Set<Callable<Void>> tasks = IntStream.range(0, matrixSize).mapToObj(
+            col -> ((Callable<Void>) () -> {
+                int[] columnB = new int[matrixSize];
+                for (int j = 0; j < matrixSize; j++) {
+                    columnB[j] = matrixB[j][col];
                 }
-            });
-        }
+                for (int row = 0; row < matrixSize; row++) {
+                    int sum = 0;
+                    int[] rowA = matrixA[row];
+                    for (int k = 0; k < matrixSize; k++) {
+                        sum += rowA[k] * columnB[k];
+                    }
+                    matrixC[row][col] = sum;
+                }
+                return null;
+            })).collect(Collectors.toSet());
         executor.invokeAll(tasks);
         return matrixC;
     }
