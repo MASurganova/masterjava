@@ -1,8 +1,8 @@
 package ru.javaops.masterjava.matrix;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
+import ru.javaops.masterjava.service.MailService;
+
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -11,43 +11,51 @@ import java.util.concurrent.*;
  */
 public class MatrixUtil {
 
-    // TODO implement parallel multiplication matrixA*matrixB
     public static int[][] concurrentMultiply(int[][] matrixA, int[][] matrixB, ExecutorService executor) throws InterruptedException, ExecutionException {
-        executor = Executors.newFixedThreadPool(10);
-        ArrayList<Future> futures = new ArrayList<>();
         final int matrixSize = matrixA.length;
         final int[][] matrixC = new int[matrixSize][matrixSize];
+        Set<Callable<Void>> tasks = new HashSet<>();
         for (int i = 0; i < matrixSize; i++) {
-            int n = i;
-            futures.add(executor.submit(() -> {
-                for (int j = 0; j < matrixSize; j++) {
-                    int sum = 0;
-                    for (int k = 0; k < matrixSize; k++) {
-                        sum += matrixA[n][k] * matrixB[k][j];
+            int[] columnB = new int[matrixSize];
+            for (int j = 0; j < matrixSize; j++) {
+                columnB[j]= matrixB[j][i];
+            }
+            int col = i;
+            tasks.add(new Callable<Void>() {
+                @Override
+                public Void call() {
+                    for (int row = 0; row < matrixSize; row++) {
+                        int sum = 0;
+                        int[] rowA = matrixA[row];
+                        for (int k = 0; k < matrixSize; k++) {
+                            sum += rowA[k] * columnB[k];
+                        }
+                        matrixC[row][col] = sum;
                     }
-                    matrixC[n][j] = sum;
+                    return null;
                 }
-            }));
+            });
         }
-        System.out.println(futures.size());
-        for (Future future : futures) {
-            future.get();
-        }
+        executor.invokeAll(tasks);
         return matrixC;
     }
 
-    // TODO optimize by https://habrahabr.ru/post/114797/
     public static int[][] singleThreadMultiply(int[][] matrixA, int[][] matrixB) {
         final int matrixSize = matrixA.length;
         final int[][] matrixC = new int[matrixSize][matrixSize];
 
-        for (int i = 0; i < matrixSize; i++) {
-            for (int j = 0; j < matrixSize; j++) {
+        for (int col = 0; col < matrixSize; col++) {
+            int[] columnB = new int[matrixSize];
+            for (int i = 0; i < matrixSize; i++) {
+                columnB[i]= matrixB[i][col];
+            }
+            for (int row = 0; row < matrixSize; row++) {
                 int sum = 0;
+                int[] rowA = matrixA[row];
                 for (int k = 0; k < matrixSize; k++) {
-                    sum += matrixA[i][k] * matrixB[k][j];
+                    sum += rowA[k] * columnB[k];
                 }
-                matrixC[i][j] = sum;
+                matrixC[row][col] = sum;
             }
         }
         return matrixC;
