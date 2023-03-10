@@ -6,11 +6,10 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
-
 /**
  * This object contains factory methods for each 
  * Java content interface and Java element interface 
- * generated in the ru.javaops.masterjava.xml.schema package. 
+ * generated in the javax package. 
  * <p>An ObjectFactory allows you to programatically 
  * construct new instances of the Java representation 
  * for XML content. The Java representation of XML 
@@ -27,7 +26,7 @@ public class ObjectFactory {
     private final static QName _City_QNAME = new QName("http://javaops.ru", "City");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: ru.javaops.masterjava.xml.schema
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: javax
      * 
      */
     public ObjectFactory() {
@@ -42,11 +41,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link User }
+     * Create an instance of {@link Project }
      * 
      */
-    public User createUser() {
-        return new User();
+    public Project createProject() {
+        return new Project();
+    }
+
+    /**
+     * Create an instance of {@link Group }
+     * 
+     */
+    public Group createGroup() {
+        return new Group();
     }
 
     /**
@@ -66,6 +73,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Project.Groups }
+     * 
+     */
+    public Project.Groups createProjectGroups() {
+        return new Project.Groups();
+    }
+
+    /**
+     * Create an instance of {@link User }
+     * 
+     */
+    public User createUser() {
+        return new User();
+    }
+
+    /**
+     * Create an instance of {@link Group.Users }
+     * 
+     */
+    public Group.Users createGroupUsers() {
+        return new Group.Users();
+    }
+
+    /**
      * Create an instance of {@link CityType }
      * 
      */
@@ -74,8 +105,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link CityType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link CityType }{@code >}
      * 
+     * @param value
+     *     Java instance representing xml element's value.
+     * @return
+     *     the new instance of {@link JAXBElement }{@code <}{@link CityType }{@code >}
      */
     @XmlElementDecl(namespace = "http://javaops.ru", name = "City")
     public JAXBElement<CityType> createCity(CityType value) {

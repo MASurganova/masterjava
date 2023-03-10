@@ -14,30 +14,21 @@ import java.util.List;
  * &lt;complexType&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
- *       &lt;all&gt;
- *         &lt;element name="Cities"&gt;
- *           &lt;complexType&gt;
- *             &lt;complexContent&gt;
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
- *                 &lt;sequence maxOccurs="unbounded"&gt;
- *                   &lt;element ref="{http://javaops.ru}City"/&gt;
- *                 &lt;/sequence&gt;
- *               &lt;/restriction&gt;
- *             &lt;/complexContent&gt;
- *           &lt;/complexType&gt;
- *         &lt;/element&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="Users"&gt;
  *           &lt;complexType&gt;
  *             &lt;complexContent&gt;
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
- *                 &lt;sequence maxOccurs="unbounded" minOccurs="0"&gt;
+ *                 &lt;sequence maxOccurs="unbounded"&gt;
  *                   &lt;element ref="{http://javaops.ru}User"/&gt;
  *                 &lt;/sequence&gt;
  *               &lt;/restriction&gt;
  *             &lt;/complexContent&gt;
  *           &lt;/complexType&gt;
  *         &lt;/element&gt;
- *       &lt;/all&gt;
+ *       &lt;/sequence&gt;
+ *       &lt;attribute name="type" use="required" type="{http://javaops.ru}groupType" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -47,38 +38,41 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-
+    "name",
+    "users"
 })
-@XmlRootElement(name = "Payload", namespace = "http://javaops.ru")
-public class Payload {
+@XmlRootElement(name = "Group", namespace = "http://javaops.ru")
+public class Group {
 
-    @XmlElement(name = "Cities", namespace = "http://javaops.ru", required = true)
-    protected Payload.Cities cities;
+    @XmlElement(namespace = "http://javaops.ru", required = true)
+    protected String name;
     @XmlElement(name = "Users", namespace = "http://javaops.ru", required = true)
-    protected Payload.Users users;
+    protected Group.Users users;
+    @XmlAttribute(name = "type", required = true)
+    protected GroupType type;
 
     /**
-     * Gets the value of the cities property.
+     * Gets the value of the name property.
      * 
      * @return
      *     possible object is
-     *     {@link Payload.Cities }
+     *     {@link String }
      *     
      */
-    public Payload.Cities getCities() {
-        return cities;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Sets the value of the cities property.
+     * Sets the value of the name property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Payload.Cities }
+     *     {@link String }
      *     
      */
-    public void setCities(Payload.Cities value) {
-        this.cities = value;
+    public void setName(String value) {
+        this.name = value;
     }
 
     /**
@@ -86,10 +80,10 @@ public class Payload {
      * 
      * @return
      *     possible object is
-     *     {@link Payload.Users }
+     *     {@link Group.Users }
      *     
      */
-    public Payload.Users getUsers() {
+    public Group.Users getUsers() {
         return users;
     }
 
@@ -98,11 +92,35 @@ public class Payload {
      * 
      * @param value
      *     allowed object is
-     *     {@link Payload.Users }
+     *     {@link Group.Users }
      *     
      */
-    public void setUsers(Payload.Users value) {
+    public void setUsers(Group.Users value) {
         this.users = value;
+    }
+
+    /**
+     * Gets the value of the type property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link GroupType }
+     *     
+     */
+    public GroupType getType() {
+        return type;
+    }
+
+    /**
+     * Sets the value of the type property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link GroupType }
+     *     
+     */
+    public void setType(GroupType value) {
+        this.type = value;
     }
 
 
@@ -116,66 +134,6 @@ public class Payload {
      *   &lt;complexContent&gt;
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
      *       &lt;sequence maxOccurs="unbounded"&gt;
-     *         &lt;element ref="{http://javaops.ru}City"/&gt;
-     *       &lt;/sequence&gt;
-     *     &lt;/restriction&gt;
-     *   &lt;/complexContent&gt;
-     * &lt;/complexType&gt;
-     * </pre>
-     * 
-     * 
-     */
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "city"
-    })
-    public static class Cities {
-
-        @XmlElement(name = "City", namespace = "http://javaops.ru", required = true)
-        protected List<CityType> city;
-
-        /**
-         * Gets the value of the city property.
-         * 
-         * <p>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the Jakarta XML Binding object.
-         * This is why there is not a <CODE>set</CODE> method for the city property.
-         * 
-         * <p>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getCity().add(newItem);
-         * </pre>
-         * 
-         * 
-         * <p>
-         * Objects of the following type(s) are allowed in the list
-         * {@link CityType }
-         * 
-         * 
-         */
-        public List<CityType> getCity() {
-            if (city == null) {
-                city = new ArrayList<CityType>();
-            }
-            return this.city;
-        }
-
-    }
-
-
-    /**
-     * <p>Java class for anonymous complex type.
-     * 
-     * <p>The following schema fragment specifies the expected content contained within this class.
-     * 
-     * <pre>
-     * &lt;complexType&gt;
-     *   &lt;complexContent&gt;
-     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
-     *       &lt;sequence maxOccurs="unbounded" minOccurs="0"&gt;
      *         &lt;element ref="{http://javaops.ru}User"/&gt;
      *       &lt;/sequence&gt;
      *     &lt;/restriction&gt;
@@ -191,7 +149,7 @@ public class Payload {
     })
     public static class Users {
 
-        @XmlElement(name = "User", namespace = "http://javaops.ru")
+        @XmlElement(name = "User", namespace = "http://javaops.ru", required = true)
         protected List<User> user;
 
         /**
