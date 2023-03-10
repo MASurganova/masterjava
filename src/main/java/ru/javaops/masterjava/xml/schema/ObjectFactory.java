@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
+
 /**
  * This object contains factory methods for each 
  * Java content interface and Java element interface 
@@ -49,14 +50,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Group }
-     * 
-     */
-    public Group createGroup() {
-        return new Group();
-    }
-
-    /**
      * Create an instance of {@link Payload.Cities }
      * 
      */
@@ -73,11 +66,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Project.Groups }
+     * Create an instance of {@link Project.Group }
      * 
      */
-    public Project.Groups createProjectGroups() {
-        return new Project.Groups();
+    public Project.Group createProjectGroup() {
+        return new Project.Group();
     }
 
     /**
@@ -86,14 +79,6 @@ public class ObjectFactory {
      */
     public User createUser() {
         return new User();
-    }
-
-    /**
-     * Create an instance of {@link Group.Users }
-     * 
-     */
-    public Group.Users createGroupUsers() {
-        return new Group.Users();
     }
 
     /**

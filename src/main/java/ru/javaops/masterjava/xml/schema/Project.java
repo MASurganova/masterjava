@@ -2,8 +2,11 @@
 package ru.javaops.masterjava.xml.schema;
 
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * <p>Java class for anonymous complex type.
@@ -15,20 +18,21 @@ import java.util.List;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
- *         &lt;element name="Groups"&gt;
- *           &lt;complexType&gt;
- *             &lt;complexContent&gt;
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
- *                 &lt;sequence maxOccurs="unbounded"&gt;
- *                   &lt;element ref="{http://javaops.ru}Group"/&gt;
- *                 &lt;/sequence&gt;
- *               &lt;/restriction&gt;
- *             &lt;/complexContent&gt;
- *           &lt;/complexType&gt;
- *         &lt;/element&gt;
+ *         &lt;sequence maxOccurs="unbounded"&gt;
+ *           &lt;element name="Group"&gt;
+ *             &lt;complexType&gt;
+ *               &lt;complexContent&gt;
+ *                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *                   &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}ID" /&gt;
+ *                   &lt;attribute name="type" use="required" type="{http://javaops.ru}groupType" /&gt;
+ *                 &lt;/restriction&gt;
+ *               &lt;/complexContent&gt;
+ *             &lt;/complexType&gt;
+ *           &lt;/element&gt;
+ *         &lt;/sequence&gt;
  *       &lt;/sequence&gt;
+ *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -38,43 +42,18 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "name",
     "description",
-    "groups"
+    "group"
 })
 @XmlRootElement(name = "Project", namespace = "http://javaops.ru")
 public class Project {
 
     @XmlElement(namespace = "http://javaops.ru", required = true)
-    protected String name;
-    @XmlElement(namespace = "http://javaops.ru", required = true)
     protected String description;
-    @XmlElement(name = "Groups", namespace = "http://javaops.ru", required = true)
-    protected Project.Groups groups;
-
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+    @XmlElement(name = "Group", namespace = "http://javaops.ru", required = true)
+    protected List<Project.Group> group;
+    @XmlAttribute(name = "name", required = true)
+    protected String name;
 
     /**
      * Gets the value of the description property.
@@ -101,27 +80,56 @@ public class Project {
     }
 
     /**
-     * Gets the value of the groups property.
+     * Gets the value of the group property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Project.Groups }
-     *     
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the Jakarta XML Binding object.
+     * This is why there is not a <CODE>set</CODE> method for the group property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getGroup().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link Project.Group }
+     * 
+     * 
      */
-    public Project.Groups getGroups() {
-        return groups;
+    public List<Project.Group> getGroup() {
+        if (group == null) {
+            group = new ArrayList<Project.Group>();
+        }
+        return this.group;
     }
 
     /**
-     * Sets the value of the groups property.
+     * Gets the value of the name property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the value of the name property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Project.Groups }
+     *     {@link String }
      *     
      */
-    public void setGroups(Project.Groups value) {
-        this.groups = value;
+    public void setName(String value) {
+        this.name = value;
     }
 
 
@@ -134,9 +142,8 @@ public class Project {
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
-     *       &lt;sequence maxOccurs="unbounded"&gt;
-     *         &lt;element ref="{http://javaops.ru}Group"/&gt;
-     *       &lt;/sequence&gt;
+     *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}ID" /&gt;
+     *       &lt;attribute name="type" use="required" type="{http://javaops.ru}groupType" /&gt;
      *     &lt;/restriction&gt;
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
@@ -145,41 +152,63 @@ public class Project {
      * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "group"
-    })
-    public static class Groups {
+    @XmlType(name = "")
+    public static class Group {
 
-        @XmlElement(name = "Group", namespace = "http://javaops.ru", required = true)
-        protected List<Group> group;
+        @XmlAttribute(name = "name", required = true)
+        @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+        @XmlID
+        @XmlSchemaType(name = "ID")
+        protected String name;
+        @XmlAttribute(name = "type", required = true)
+        protected GroupType type;
 
         /**
-         * Gets the value of the group property.
+         * Gets the value of the name property.
          * 
-         * <p>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the Jakarta XML Binding object.
-         * This is why there is not a <CODE>set</CODE> method for the group property.
-         * 
-         * <p>
-         * For example, to add a new item, do as follows:
-         * <pre>
-         *    getGroup().add(newItem);
-         * </pre>
-         * 
-         * 
-         * <p>
-         * Objects of the following type(s) are allowed in the list
-         * {@link Group }
-         * 
-         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
          */
-        public List<Group> getGroup() {
-            if (group == null) {
-                group = new ArrayList<Group>();
-            }
-            return this.group;
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * Sets the value of the name property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setName(String value) {
+            this.name = value;
+        }
+
+        /**
+         * Gets the value of the type property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link GroupType }
+         *     
+         */
+        public GroupType getType() {
+            return type;
+        }
+
+        /**
+         * Sets the value of the type property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link GroupType }
+         *     
+         */
+        public void setType(GroupType value) {
+            this.type = value;
         }
 
     }

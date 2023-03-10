@@ -1,17 +1,15 @@
 <Payload xmlns="http://javaops.ru"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://javaops.ru payload.xsd">
+    <Projects></Projects>
     <Users>
-        <User flag="active" city="kiv"
-            email = "gmail@gmail.com">
+        <User flag="active" city="kiv" email = "gmail@gmail.com">
             <fullName>Full Name</fullName>
         </User>
-        <User flag="superuser" city="spb"
-            email="admin@javaops.ru">
+        <User flag="superuser" city="spb" email="admin@javaops.ru">
             <fullName>Admin</fullName>
         </User>
-        <User flag="deleted" city="spb"
-            email="mail@yandex.ru">
+        <User flag="deleted" city="spb" email="mail@yandex.ru">
             <fullName>Deleted</fullName>
         </User>
     </Users>
