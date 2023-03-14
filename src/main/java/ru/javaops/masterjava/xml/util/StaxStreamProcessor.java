@@ -5,6 +5,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 public class StaxStreamProcessor implements AutoCloseable {
     private static final XMLInputFactory FACTORY = XMLInputFactory.newInstance();
@@ -20,19 +22,15 @@ public class StaxStreamProcessor implements AutoCloseable {
     }
 
     public boolean doUntil(int stopEvent, String value) throws XMLStreamException {
-        while (reader.hasNext()) {
-            int event = reader.next();
-            if (event == stopEvent) {
-                if (value.equals(getValue(event))) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return doUntilAny(stopEvent, value) != null;
     }
 
     public String getValue(int event) throws XMLStreamException {
         return (event == XMLEvent.CHARACTERS) ? reader.getText() : reader.getLocalName();
+    }
+
+    public String getAttribute(String name) throws XMLStreamException {
+        return reader.getAttributeValue(null, name);
     }
 
     public String getElementValue(String element) throws XMLStreamException {
@@ -52,5 +50,17 @@ public class StaxStreamProcessor implements AutoCloseable {
                 // empty
             }
         }
+    }
+
+    public String  doUntilAny(int stopEvent, String ... values)  throws XMLStreamException {
+        while (reader.hasNext()) {
+            int event = reader.next();
+            if (event == stopEvent) {
+                String xmlValue = getValue(event);
+                for (String value : values)
+                    if (value.equals(xmlValue)) return xmlValue;
+            }
+        }
+        return null;
     }
 }
