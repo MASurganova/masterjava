@@ -3,6 +3,7 @@ package ru.javaops.masterjava.xml.util;
 import com.google.common.io.Resources;
 import org.junit.Test;
 import org.w3c.dom.NodeList;
+import ru.javaops.masterjava.xml.util.XPathProcessor;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;

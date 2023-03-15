@@ -2,6 +2,7 @@ package ru.javaops.masterjava.xml.util;
 
 import com.google.common.io.Resources;
 import org.junit.Test;
+import ru.javaops.masterjava.xml.util.XsltProcessor;
 
 import java.io.InputStream;
 

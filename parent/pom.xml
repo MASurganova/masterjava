@@ -51,6 +51,30 @@
             <version>RELEASE</version>
         </dependency>
 
+<!--        &lt;!&ndash; API &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>jakarta.xml.bind</groupId>-->
+<!--            <artifactId>jakarta.xml.bind-api</artifactId>-->
+<!--            <version>2.3.3</version>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Runtime &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.sun.xml.bind</groupId>-->
+<!--            <artifactId>jaxb-impl</artifactId>-->
+<!--            <version>2.3.3</version>-->
+<!--            <scope>runtime</scope>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Alternative runtime &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.glassfish.jaxb</groupId>-->
+<!--            <artifactId>jaxb-runtime</artifactId>-->
+<!--            <version>2.3.3</version>-->
+<!--            <scope>runtime</scope>-->
+<!--        </dependency>-->
+
+
         <!--Test-->
         <dependency>
             <groupId>junit</groupId>
