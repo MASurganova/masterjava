@@ -5,8 +5,6 @@ import org.junit.Test;
 import ru.javaops.masterjava.xml.schema.CityType;
 import ru.javaops.masterjava.xml.schema.ObjectFactory;
 import ru.javaops.masterjava.xml.schema.Payload;
-import ru.javaops.masterjava.xml.util.JaxbParser;
-import ru.javaops.masterjava.xml.util.Schemas;
 
 
 import javax.xml.bind.JAXBElement;
@@ -16,7 +14,7 @@ public class JaxbParserTest {
     private static final JaxbParser JAXB_PARSER = new JaxbParser(ObjectFactory.class);
 
     static {
-        JAXB_PARSER.setSchema(Schemas.ofClasspath("payload.xsd"));
+        JAXB_PARSER.setSchema(Schemas.ofClasspath("src/main/resource/payload.xsd"));
     }
 
     @Test
@@ -32,7 +30,7 @@ public class JaxbParserTest {
     @Test
     public void testCity() throws Exception {
         JAXBElement<CityType> cityElement = JAXB_PARSER.unmarshal(
-                Resources.getResource("city.xml").openStream());
+                Resources.getResource("src/main/resource/city.xml").openStream());
         CityType city = cityElement.getValue();
         JAXBElement<CityType> cityElement2 =
                 new JAXBElement<>(new QName("http://javaops.ru", "City"), CityType.class, city);
