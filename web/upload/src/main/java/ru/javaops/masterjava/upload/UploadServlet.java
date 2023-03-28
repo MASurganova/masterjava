@@ -1,6 +1,8 @@
 package ru.javaops.masterjava.upload;
 
 import org.thymeleaf.context.WebContext;
+import ru.javaops.masterjava.persist.DBIProvider;
+import ru.javaops.masterjava.persist.dao.UserDao;
 import ru.javaops.masterjava.persist.model.User;
 
 import javax.servlet.ServletException;
@@ -21,6 +23,7 @@ import static ru.javaops.masterjava.common.web.ThymeleafListener.engine;
 public class UploadServlet extends HttpServlet {
 
     private final UserProcessor userProcessor = new UserProcessor();
+    private final UserDao userDao = DBIProvider.getDao(UserDao.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,6 +44,7 @@ public class UploadServlet extends HttpServlet {
             try (InputStream is = filePart.getInputStream()) {
                 List<User> users = userProcessor.process(is);
                 webContext.setVariable("users", users);
+                userDao.insertAll(users.listIterator());
                 engine.process("result", webContext, resp.getWriter());
             }
         } catch (Exception e) {
