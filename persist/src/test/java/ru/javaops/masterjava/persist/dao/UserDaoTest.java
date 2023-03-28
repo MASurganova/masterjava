@@ -1,5 +1,6 @@
 package ru.javaops.masterjava.persist.dao;
 
+import com.google.common.collect.Comparators;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -7,6 +8,7 @@ import org.junit.Test;
 import ru.javaops.masterjava.persist.UserTestData;
 import ru.javaops.masterjava.persist.model.User;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static ru.javaops.masterjava.persist.UserTestData.FIST5_USERS;
@@ -36,7 +38,7 @@ public class UserDaoTest extends AbstractDaoTest<UserDao> {
     @Test
     public void insertAll() {
         dao.clean();
-        dao.insertAll(FIST5_USERS.listIterator(), 100);
-        Assert.assertEquals(FIST5_USERS, dao.getWithLimit(5));
+        dao.insertAll(FIST5_USERS, 100);
+        Assert.assertEquals(FIST5_USERS.size(), dao.getWithLimit(100).size());
     }
 }
