@@ -24,7 +24,10 @@ public class ProjectTestData {
         ProjectDao dao = DBIProvider.getDao(ProjectDao.class);
         dao.clean();
         DBIProvider.getDBI().useTransaction((conn, status) -> {
-            PROJECTS.forEach(dao::insert);
+            PROJECTS.forEach(p -> {
+                Project temp = dao.insert(p);
+                p = temp;
+            });
         });
     }
 }

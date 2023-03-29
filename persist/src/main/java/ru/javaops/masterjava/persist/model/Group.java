@@ -5,8 +5,10 @@ import lombok.*;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Group {
     private @NonNull String name;
-    private @NonNull Project project;
+    @Column("project_id")
+    private @NonNull int projectId;
     private @NonNull GroupFlag flag;
 }
