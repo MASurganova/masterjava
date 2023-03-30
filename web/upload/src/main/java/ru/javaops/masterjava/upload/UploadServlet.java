@@ -3,6 +3,7 @@ package ru.javaops.masterjava.upload;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import org.thymeleaf.context.WebContext;
+import ru.javaops.masterjava.persist.model.City;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -24,6 +25,7 @@ public class UploadServlet extends HttpServlet {
     private static final int CHUNK_SIZE = 2000;
 
     private final UserProcessor userProcessor = new UserProcessor();
+    private final CityProcessor cityProcessor = new CityProcessor();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -48,6 +50,9 @@ public class UploadServlet extends HttpServlet {
                             new WebContext(req, resp, req.getServletContext(), req.getLocale(),
                                     ImmutableMap.of("users", failed));
                     engine.process("result", webContext, resp.getWriter());
+                    is.reset();
+                    List<City> cities = cityProcessor.process(is);
+                    log.info("Added cities: " + cities);
                     return;
                 }
             }
