@@ -47,3 +47,5 @@ CREATE TABLE groups
     FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE CASCADE
 );
 
+TRUNCATE cities CASCADE ;
+

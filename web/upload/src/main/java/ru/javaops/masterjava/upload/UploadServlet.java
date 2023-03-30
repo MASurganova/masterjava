@@ -36,6 +36,7 @@ public class UploadServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String message;
         int chunkSize = CHUNK_SIZE;
+
         try {
 //            http://docs.oracle.com/javaee/6/tutorial/doc/glraq.html
             chunkSize = Integer.parseInt(req.getParameter("chunkSize"));
@@ -44,15 +45,16 @@ public class UploadServlet extends HttpServlet {
             } else {
                 Part filePart = req.getPart("fileToUpload");
                 try (InputStream is = filePart.getInputStream()) {
+                    List<City> cities = cityProcessor.process(is);
+                    log.info("Added cities: " + cities);
+                }
+                try (InputStream is = filePart.getInputStream()) {
                     List<UserProcessor.FailedEmails> failed = userProcessor.process(is, chunkSize);
                     log.info("Failed users: " + failed);
                     final WebContext webContext =
                             new WebContext(req, resp, req.getServletContext(), req.getLocale(),
                                     ImmutableMap.of("users", failed));
                     engine.process("result", webContext, resp.getWriter());
-                    is.reset();
-                    List<City> cities = cityProcessor.process(is);
-                    log.info("Added cities: " + cities);
                     return;
                 }
             }

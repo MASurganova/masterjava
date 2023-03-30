@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class CityDao implements AbstractDao{
 
 
-    @SqlUpdate("INSERT INTO cities (id, name) VALUES (:id, :name) ")
+    @SqlUpdate("INSERT INTO cities (id, name) VALUES (:id, :name) ON CONFLICT DO NOTHING")
     public abstract int insert(@BindBean City city);
 
     @SqlQuery("SELECT * FROM cities ORDER BY id")
