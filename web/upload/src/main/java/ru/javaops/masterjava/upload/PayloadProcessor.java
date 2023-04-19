@@ -28,8 +28,8 @@ public class PayloadProcessor {
 
     public List<FailedEmails> process(InputStream is, int chunkSize) throws XMLStreamException, JAXBException {
         final StaxStreamProcessor processor = new StaxStreamProcessor(is);
-        projectProcessor.process(processor);
+        val groups= projectProcessor.process(processor);
         val cities = cityProcessor.process(processor);
-        return userProcessor.process(processor, cities, chunkSize);
+        return userProcessor.process(processor, cities, groups, chunkSize);
     }
 }
