@@ -37,9 +37,14 @@ CREATE TABLE user_group
     CONSTRAINT users_group_idx UNIQUE (user_id, group_id)
 );
 --changeset masurganova:3
-CREATE TABLE mails
+CREATE TABLE mail_hist
 (
-    id     INTEGER PRIMARY KEY DEFAULT nextval('common_seq'),
-    email  TEXT NOT NULL,
-    result TEXT NOT NULL
+    id     SERIAL PRIMARY KEY,
+    list_to  TEXT NULL,
+    list_cc  TEXT NULL,
+    subject  TEXT NULL,
+    state TEXT NOT NULL ,
+    datetime TIMESTAMP NOT NULL
 );
+COMMENT ON TABLE mail_hist IS 'История отправки email';
+COMMENT ON COLUMN mail_hist.datetime IS 'Время отправки';
