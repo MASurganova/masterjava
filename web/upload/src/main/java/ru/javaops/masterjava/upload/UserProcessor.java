@@ -1,5 +1,6 @@
 package ru.javaops.masterjava.upload;
 
+import com.google.common.base.Splitter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import ru.javaops.masterjava.persist.DBIProvider;
@@ -24,6 +25,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class UserProcessor {
@@ -51,33 +53,25 @@ public class UserProcessor {
         while (processor.doUntil(XMLEvent.START_ELEMENT, "User")) {
             String cityRef = processor.getAttribute("city");
             String groupRefs = processor.getAttribute("groupRefs");
-            List<String> groups = (groupRefs == null || groupRefs.isEmpty()) ? Collections.EMPTY_LIST : Arrays.asList(groupRefs.split(" "));
+            List<String> groups = (groupRefs == null || groupRefs.isEmpty()) ? Collections.emptyList() : Splitter.on(' ').splitToList(groupRefs);
             ru.javaops.masterjava.xml.schema.User xmlUser = unmarshaller.unmarshal(processor.getReader(), ru.javaops.masterjava.xml.schema.User.class);
             if (cities.get(cityRef) == null) {
                 failed.add(new FailedEmails(xmlUser.getEmail(), "City '" + cityRef + "' is not present in DB"));
             } else {
-                int userId = id++;
-                final User user = new User(userId, xmlUser.getValue(), xmlUser.getEmail(), UserFlag.valueOf(xmlUser.getFlag().value()), cityRef);
+                final User user = new User(id++, xmlUser.getValue(), xmlUser.getEmail(), UserFlag.valueOf(xmlUser.getFlag().value()), cityRef);
                 boolean userGroupOk = true;
                 List<UserGroup> userGroups = new ArrayList<>();
-                for (String group : groups) {
-                    if (groupMap.containsKey(group)) {
-                        userGroups.add(new UserGroup(userId, groupMap.get(group).getId()));
-                    } else {
-                        userGroupOk = false;
-                        failed.add(new FailedEmails(xmlUser.getEmail(), "Group '" + group + "' is not present in DB"));
-                        break;
-                    }
-                }
-                if (userGroupOk) {
+                if (!groupMap.keySet().containsAll(groups)) {
+                    failed.add(new FailedEmails(xmlUser.getEmail(), "One of groups from " + groups + "' is not present in DB"));
+                } else {
                     chunk.add(user);
-                    chunkUserGroups.addAll(userGroups);
-                }
-                if (chunk.size() == chunkSize) {
-                    addChunkFutures(chunkFutures, chunk, chunkUserGroups);
-                    chunk = new ArrayList<>(chunkSize);
-                    chunkUserGroups = new ArrayList<>();
-                    id = userDao.getSeqAndSkip(chunkSize);
+                    chunkUserGroups.addAll(groups.stream().map(g -> new UserGroup(user.getId(), groupMap.get(g).getId())).collect(Collectors.toList()));
+                    if (chunk.size() == chunkSize) {
+                        addChunkFutures(chunkFutures, chunk, chunkUserGroups);
+                        chunk = new ArrayList<>(chunkSize);
+                        chunkUserGroups = new ArrayList<>();
+                        id = userDao.getSeqAndSkip(chunkSize);
+                    }
                 }
             }
         }
